@@ -34,7 +34,7 @@ ruby bot_saves_princess1.rb
 
 ### Run Rspec:
 ```
-rspec spec/bot_saves_princess_spec.rb
+rspec spec/bot_saves_princess1_spec.rb
 (for this you need to have Rspec gem installed use command gem install rspec if not installed)
 ```
 
