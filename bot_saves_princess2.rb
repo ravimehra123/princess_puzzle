@@ -1,67 +1,48 @@
 # Bot saving princess class
 class BotSavesPrincess2
-  def initialize(grid_size, grid)
+  attr_reader :grid_size, :bot_y, :bot_x, :grid
+
+  def initialize(grid_size, bot_location, grid)
     @grid_size = grid_size
     @grid = grid
+    @bot_y, @bot_x = extract_coordinates(bot_location)
   end
 
-  def find_bot_location
-    @grid.each_index do |x|
-      @row = x
-      @column = @grid[x].index 'm'
-      break unless @column.nil?
+  def next_move
+    princess_xy = []
+    grid.each_with_index do |line, index|
+      if line.include?('p')
+        princess_xy.push(line.chars.index('p'))
+        princess_xy.push(index)
+      end
     end
-    raise 'Location of bot not found' if @column.nil?
-
-    return @row, @column
+    display_moves(princess_xy)
   end
 
-  def find_princess_location
-    @grid.each_index do |x|
-      @row = x
-      @column = @grid[x].index 'p'
-      break unless @column.nil?
-    end
-    raise 'Location of princess not found' if @column.nil?
+  private
 
-    return @row, @column
+  def display_moves(princess_xy)
+    cols = princess_xy[0] - bot_x
+    rows = princess_xy[1] - bot_y
+    if rows != 0
+      move = rows < 0 ? 'UP' : 'DOWN'
+      puts move
+      return
+    elsif cols != 0
+      move = cols < 0 ? 'LEFT' : 'RIGHT'
+      puts move
+    end
   end
 
-  def bot_finding_princess(bot_x, bot_y, princess_x, princess_y)
-    return true if bot_x == princess_x && bot_y == princess_y
-
-    if bot_y < princess_y
-      puts 'Right'
-      bot_y += 1
-    elsif bot_y > princess_y
-      puts 'LEFT'
-      bot_y -= 1
-    elsif bot_x < princess_x
-      puts 'DOWN'
-      bot_x += 1
-    elsif bot_x > princess_x
-      puts 'UP'
-      bot_x -= 1
-    end
-    bot_finding_princess(bot_x, bot_y, princess_x, princess_y)
-  end
-
-  def display_path_to_princess
-    raise 'Number should be an odd number' if @grid_size.even?
-
-    if @grid_size < 3 || @grid_size > 100
-      raise 'Number should be between (3 >= n < 100)'
-    end
-
-    bot_x, bot_y = find_bot_location
-    princess_x, princess_y = find_princess_location
-    bot_finding_princess(bot_x, bot_y, princess_x, princess_y)
+  def extract_coordinates(bot_location)
+    bot_location.strip.split.map(&:to_i)
   end
 end
 
-grid_size = 5
-grid = [['-', 'm', '-'],
-        ['-', '-', '-'],
-        ['-', 'p', '-']]
-bot_saves_princes2 = BotSavesPrincess2.new(grid_size, grid)
-bot_saves_princes2.display_path_to_princess
+grid_size = 3
+bot_location = '1 1'
+grid = ['-p-',
+        '-m-',
+        '---']
+bot_saves_princes2 = BotSavesPrincess2.new(grid_size, bot_location, grid)
+bot_saves_princes2.next_move

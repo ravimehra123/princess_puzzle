@@ -62,13 +62,13 @@ Output only the next move you take to rescue the princess. Valid moves are LEFT,
 ### Sample input
 ```
 3
----
--m-
--p-
+['-p-',
+'-m-',
+'---']
 ```
 Sample output
 
-DOWN
+UP
 
 ### Run code: 
 ruby bot_saves_princess2.rb
